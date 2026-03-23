@@ -3,204 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Model Level Up</title>
+    <title>Math Model: Glassmorphism Edition</title>
     <style>
         :root {
-            --bg-color: #0d0d0d;
-            --card-bg: #1a1a1a;
-            --lime-accent: #32CD32;
-            --lime-glow: #bfff00;
-            --text-main: #e0e0e0;
-            --text-dim: #a0a0a0;
+            --lime: #32CD32;
+            --lime-glow: rgba(50, 205, 50, 0.4);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            color: var(--lime-accent);
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px rgba(50, 205, 50, 0.3);
-        }
-
-        .section-title {
-            color: var(--lime-accent);
-            border-bottom: 2px solid var(--lime-accent);
-            padding-bottom: 10px;
-            margin-top: 40px;
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
+            min-height: 100vh;
+            margin: 0;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
         }
 
-        .card-grid {
+        .menu-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 25px;
+            width: 90%;
+            max-width: 1100px;
+            padding: 20px;
         }
 
+        /* Glassmorphism Card Style */
         .card {
-            background: var(--card-bg);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 20px;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: left;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--lime-accent);
+            transform: translateY(-10px);
+            border-color: var(--lime);
+            box-shadow: 0 10px 30px var(--lime-glow);
         }
 
-        .step-num {
-            color: var(--lime-glow);
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .note-box {
-            background: rgba(50, 205, 50, 0.1);
-            border-left: 5px solid var(--lime-accent);
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-
-        .quiz-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .quiz-table th, .quiz-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #333;
-        }
-
-        .quiz-table th {
-            color: var(--lime-glow);
-            background: #222;
-        }
-
-        .verdict {
-            color: var(--lime-accent);
-            font-weight: bold;
-        }
-
-        .btn-save {
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
             display: block;
-            width: fit-content;
-            margin: 40px auto;
-            padding: 15px 40px;
-            background: var(--lime-accent);
-            color: black;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 30px;
+        }
+
+        h2 {
+            color: var(--lime);
+            margin-top: 0;
+            font-size: 1.4rem;
             text-transform: uppercase;
-            transition: box-shadow 0.3s ease;
+            letter-spacing: 1px;
         }
 
-        .btn-save:hover {
-            box-shadow: 0 0 20px var(--lime-accent);
+        .content {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ccc;
+            flex-grow: 1;
         }
 
-        code {
-            background: #222;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: var(--lime-glow);
+        /* Interactive Elements */
+        .btn-action {
+            background: transparent;
+            border: 1px solid var(--lime);
+            color: var(--lime);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: bold;
+            transition: 0.3s;
         }
+
+        .btn-action:hover {
+            background: var(--lime);
+            color: #000;
+        }
+
+        .hidden-box {
+            display: none;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            border: 1px solid #333;
+        }
+
+        /* Quiz Styling */
+        .quiz-option {
+            display: block;
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(50, 205, 50, 0.2);
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .correct { color: var(--lime); }
+        .wrong { color: #ff4d4d; }
+
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>⚡ Math Model OS</h1>
-        <p style="text-align: center; color: var(--text-dim);">V 1.0.4 — Системний підхід до розв'язання задач</p>
-    </header>
-
-    <h2 class="section-title">🚀 1. ПОЯСНЕННЯ "НА ПАЛЬЦЯХ"</h2>
-    <div class="card-grid">
-        <div class="card">
-            <p><span class="step-num">Крок 1:</span> Скласти модель = перекласти історію про човен чи дрон на мову математики (<code>x, y, =</code>).</p>
-        </div>
-        <div class="card">
-            <p><span class="step-num">Крок 2:</span> Шукаємо невідоме (це наш <code>x</code>) та зв’язки. Наприклад: швидкість течії більша на 3 км/год → <code>(x + 3)</code>.</p>
-        </div>
-    </div>
-
-    <div class="note-box">
-        <strong>⚠️ CRITICAL NOTE: ОДЗ</strong><br>
-        Це твій вбудований фаєрвол. Якщо швидкість виходить від'ємною — це баг. Від'ємні результати в задачах на рух ми просто "делітаємо".
-    </div>
-
-    <h2 class="section-title">⚡ 2. ІНТЕРАКТИВНІ КЕЙСИ</h2>
-    <div class="card-grid">
-        <div class="card">
-            <h3 style="color: var(--lime-glow);">📦 Кейс "Дрон-кур'єр"</h3>
-            <p>Дрон вилетів з точки А в Б. Збільшив швидкість на 2 м/с → прилетів на 10 хв швидше. Склади <code>speed</code>-рівняння.</p>
-        </div>
-        <div class="card" style="border: 1px dashed var(--lime-accent);">
-            <h3 style="color: var(--lime-glow);">🚤 Speedboat Challenge</h3>
-            <p>Проти течії: 40 км. Течія: 2 км/год. Рівняння: <code>40/(x-2) - 40/(x+2) = 1</code></p>
-        </div>
-    </div>
-
-    <h2 class="section-title">🏆 3. КВІЗ-БЛОК</h2>
-    <table class="quiz-table">
-        <thead>
-            <tr>
-                <th>Питання</th>
-                <th>Варіанти</th>
-                <th>Вердикт</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Мат. модель — це?</td>
-                <td>А: Рівняння / Б: Графік</td>
-                <td class="verdict">A (Скелет)</td>
-            </tr>
-            <tr>
-                <td>Чи може сторона бути < 0?</td>
-                <td>А: Так / Б: Ні</td>
-                <td class="verdict">Б (Impossible)</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h2 class="section-title">💡 4. ЛАЙФХАКИ</h2>
+<div class="menu-container">
+    
     <div class="card">
-        <ul>
-            <li><strong>Дискримінант</strong> — це твій радар. Якщо <code>D < 0</code>, ти десь помилився в моделі.</li>
-            <li><strong>Юніти</strong> — не мішай хвилини з годинами, бо вийде "каша".</li>
-        </ul>
+        <span class="card-icon">🧠</span>
+        <h2>БАЗА: ЯК ЦЕ ПРАЦЮЄ?</h2>
+        <div class="content">
+            <p><strong>Модель = Код гри.</strong> Скласти рівняння — це як прописати механіку GTA для реальної задачі.</p>
+            <ul style="padding-left: 20px;">
+                <li><span style="color:var(--lime)">Init x:</span> Вибір невідомого.</li>
+                <li><span style="color:var(--lime)">Scripting:</span> Складання рівняння.</li>
+                <li><span style="color:var(--lime)">Debug:</span> Відсіювання багів (напр. швидкість < 0).</li>
+            </ul>
+        </div>
     </div>
 
-    <a href="#" class="btn-save">Зберегти прогрес</a>
+    <div class="card">
+        <span class="card-icon">🛠️</span>
+        <h2>LEVEL UP: ЗАДАЧІ</h2>
+        <div class="content">
+            <p><strong>Задача про Дрон:</strong> Пролетів 30 км. При +3 км/год прилетів би на 30 хв швидше.</p>
+            <button class="btn-action" onclick="toggleBox('solution1')">Декомпілювати розв'язок</button>
+            <div id="solution1" class="hidden-box">
+                Нехай швидкість x.<br>
+                Рівняння:<br>
+                30/x - 30/(x+3) = 0.5<br>
+                D = b² - 4ac...
+            </div>
+            
+            <p style="margin-top:15px;"><strong>Задача про Катер:</strong> Рух за течією (x+v) та проти (x-v).</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <span class="card-icon">✅</span>
+        <h2>CHECK-POINT: ТЕСТИ</h2>
+        <div class="content" id="quiz-container">
+            <p id="question">Чи може сторона прямокутника в моделі бути -5?</p>
+            <div class="quiz-option" onclick="checkQuiz(false)">А: Так, це ж математика</div>
+            <div class="quiz-option" onclick="checkQuiz(true)">Б: Ні, геометрія не знає мінусів</div>
+            <div id="quiz-feedback" class="feedback"></div>
+        </div>
+    </div>
+
 </div>
+
+<script>
+    function toggleBox(id) {
+        const box = document.getElementById(id);
+        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function checkQuiz(isCorrect) {
+        const feedback = document.getElementById('quiz-feedback');
+        if (isCorrect) {
+            feedback.innerHTML = "ПРАВИЛЬНО! ✅ <br><small>Довжина — це фізична величина, вона не може бути меншою за нуль (ОДЗ!).</small>";
+            feedback.className = "feedback correct";
+        } else {
+            feedback.innerHTML = "ERROR! ❌ <br><small>Спробуй ще раз. Подумай про реальний світ.</small>";
+            feedback.className = "feedback wrong";
+        }
+    }
+</script>
 
 </body>
 </html>
-
