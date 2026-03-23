@@ -3,195 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Model: Glassmorphism Edition</title>
+    <title>Math Model §22 | Interactive Dashboard</title>
     <style>
         :root {
             --lime: #32CD32;
-            --lime-glow: rgba(50, 205, 50, 0.4);
-            --glass: rgba(255, 255, 255, 0.05);
+            --lime-glow: rgba(50, 205, 50, 0.5);
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body {
-            background: #0a0a0a;
+            background-color: var(--bg);
             color: #fff;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
+            background-image: radial-gradient(circle at top right, #1a2a1a, transparent);
         }
 
-        .menu-container {
+        header {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--lime);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px var(--lime-glow);
+        }
+
+        .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
             width: 90%;
-            max-width: 1100px;
-            padding: 20px;
+            max-width: 1200px;
+            padding-bottom: 50px;
         }
 
         /* Glassmorphism Card Style */
-        .card {
+        .main-card {
             background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 30px;
-            text-align: left;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.4s ease;
             display: flex;
             flex-direction: column;
         }
 
-        .card:hover {
+        .main-card:hover {
             transform: translateY(-10px);
             border-color: var(--lime);
-            box-shadow: 0 10px 30px var(--lime-glow);
+            box-shadow: 0 0 30px var(--lime-glow);
         }
 
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
+        .card-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+        h2 { color: var(--lime); font-size: 1.5rem; margin-top: 0; }
+
+        /* Content Elements */
+        .formula {
             display: block;
-        }
-
-        h2 {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--lime);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
             color: var(--lime);
-            margin-top: 0;
-            font-size: 1.4rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-align: center;
         }
 
-        .content {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #ccc;
-            flex-grow: 1;
-        }
+        .step-list { padding-left: 20px; color: #ccc; }
+        .step-list li { margin-bottom: 10px; }
 
-        /* Interactive Elements */
-        .btn-action {
+        /* Interactive Buttons */
+        .btn-toggle {
             background: transparent;
             border: 1px solid var(--lime);
             color: var(--lime);
-            padding: 10px 15px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            margin-top: 15px;
+            width: 100%;
             font-weight: bold;
+            margin-top: 15px;
             transition: 0.3s;
         }
 
-        .btn-action:hover {
-            background: var(--lime);
-            color: #000;
-        }
+        .btn-toggle:hover { background: var(--lime); color: #000; }
 
-        .hidden-box {
+        .solution-box {
             display: none;
-            background: rgba(0,0,0,0.3);
+            margin-top: 15px;
             padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-            font-family: 'Courier New', Courier, monospace;
-            border: 1px solid #333;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--lime);
         }
 
-        /* Quiz Styling */
+        /* Quiz */
         .quiz-option {
-            display: block;
             background: rgba(255,255,255,0.05);
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 10px;
             cursor: pointer;
             transition: 0.2s;
+            border: 1px solid transparent;
         }
 
-        .quiz-option:hover {
-            background: rgba(50, 205, 50, 0.2);
-        }
-
-        .feedback {
-            margin-top: 10px;
+        .quiz-option:hover { border-color: var(--lime); background: rgba(50, 205, 50, 0.1); }
+        
+        #score-display {
+            font-size: 1.2rem;
+            color: var(--lime);
             font-weight: bold;
-            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 10px;
         }
-
-        .correct { color: var(--lime); }
-        .wrong { color: #ff4d4d; }
 
     </style>
 </head>
 <body>
 
-<div class="menu-container">
-    
-    <div class="card">
+<header>
+    <h1>§ 22. Квадратне рівняння як модель</h1>
+</header>
+
+<div class="dashboard">
+
+    <section class="main-card">
         <span class="card-icon">🧠</span>
-        <h2>БАЗА: ЯК ЦЕ ПРАЦЮЄ?</h2>
+        <h2>БАЗА: ЯК ЦЕ ЗРОЗУМІТИ?</h2>
         <div class="content">
-            <p><strong>Модель = Код гри.</strong> Скласти рівняння — це як прописати механіку GTA для реальної задачі.</p>
-            <ul style="padding-left: 20px;">
-                <li><span style="color:var(--lime)">Init x:</span> Вибір невідомого.</li>
-                <li><span style="color:var(--lime)">Scripting:</span> Складання рівняння.</li>
-                <li><span style="color:var(--lime)">Debug:</span> Відсіювання багів (напр. швидкість < 0).</li>
-            </ul>
+            <p><strong>Алгоритм перетворення задачі в код:</strong></p>
+            <ol class="step-list">
+                <li><strong>Вибір невідомого:</strong> Позначаємо головне питання через <span class="formula">x</span>.</li>
+                <li><strong>Зв'язки:</strong> Виражаємо інші дані через цей <code>x</code>.</li>
+                <li><strong>Математична модель:</strong> Складаємо рівняння, що описує баланс задачі.</li>
+                <li><strong>Solve:</strong> Знаходимо корені $x_1$ та $x_2$.</li>
+                <li><strong>Debug:</strong> Відсіюємо нелогічні результати (ОДЗ).</li>
+            </ol>
+            <p style="font-size: 0.8rem; color: #888;">*Наприклад: сторона фігури не може бути від'ємною!</p>
         </div>
-    </div>
+    </section>
 
-    <div class="card">
+    <section class="main-card">
         <span class="card-icon">🛠️</span>
-        <h2>LEVEL UP: ЗАДАЧІ</h2>
-        <div class="content">
-            <p><strong>Задача про Дрон:</strong> Пролетів 30 км. При +3 км/год прилетів би на 30 хв швидше.</p>
-            <button class="btn-action" onclick="toggleBox('solution1')">Декомпілювати розв'язок</button>
-            <div id="solution1" class="hidden-box">
-                Нехай швидкість x.<br>
-                Рівняння:<br>
-                30/x - 30/(x+3) = 0.5<br>
-                D = b² - 4ac...
+        <h2>LEVEL UP: ПРИКЛАДИ</h2>
+        
+        <div class="task">
+            <p><strong>🔹 Задача про Ромб:</strong> Площа 54 см², сер. арифм. діагоналей — 10,5 см.</p>
+            <button class="btn-toggle" onclick="toggleSolution('sol1')">Розгорнути рішення</button>
+            <div id="sol1" class="solution-box">
+                $d_1 + d_2 = 21$ (бо сер. арифм. 10.5). Нехай $d_1 = x$, тоді $d_2 = 21-x$. <br>
+                Формула площі: $S = 0.5 \cdot d_1 \cdot d_2$.<br>
+                <span class="formula">0.5 \cdot x(21-x) = 54</span><br>
+                $x^2 - 21x + 108 = 0$. <br>
+                $D = 21^2 - 4 \cdot 108 = 441 - 432 = 9$.<br>
+                $x_1=12, x_2=9$. Відповідь: 12 см і 9 см.
             </div>
-            
-            <p style="margin-top:15px;"><strong>Задача про Катер:</strong> Рух за течією (x+v) та проти (x-v).</p>
         </div>
-    </div>
 
-    <div class="card">
+        <div class="task" style="margin-top: 10px;">
+            <p><strong>🔹 Задача про Точки:</strong> Кожна точка з'єднана з іншими. Всього 351 відрізок.</p>
+            <button class="btn-toggle" onclick="toggleSolution('sol2')">Розгорнути рішення</button>
+            <div id="sol2" class="solution-box">
+                Нехай точок $n$. Кожна з'єднана з $(n-1)$ точками.<br>
+                <span class="formula">\frac{n(n-1)}{2} = 351</span><br>
+                $n^2 - n - 702 = 0$. $D = 2809 = 53^2$.<br>
+                $n = 27$ (другий корінь від'ємний — видаляємо).
+            </div>
+        </div>
+    </section>
+
+    <section class="main-card">
         <span class="card-icon">✅</span>
         <h2>CHECK-POINT: ТЕСТИ</h2>
-        <div class="content" id="quiz-container">
-            <p id="question">Чи може сторона прямокутника в моделі бути -5?</p>
-            <div class="quiz-option" onclick="checkQuiz(false)">А: Так, це ж математика</div>
-            <div class="quiz-option" onclick="checkQuiz(true)">Б: Ні, геометрія не знає мінусів</div>
-            <div id="quiz-feedback" class="feedback"></div>
+        <div id="quiz">
+            <p id="q-text"><strong>Q1:</strong> Що називають математичною моделлю задачі?</p>
+            <div class="quiz-option" onclick="answer(false, 1)">А: Красивий малюнок у зошиті</div>
+            <div class="quiz-option" onclick="answer(true, 1)">Б: Рівняння, що описує умову</div>
+            
+            <p id="q2-text" style="margin-top:20px;"><strong>Q2:</strong> Корені рівняння $x_1 = 10, x_2 = -5$ для задачі про кількість учнів. Що у відповідь?</p>
+            <div class="quiz-option" onclick="answer(true, 2)">А: Тільки 10</div>
+            <div class="quiz-option" onclick="answer(false, 2)">Б: Обидва числа</div>
         </div>
-    </div>
+        <div id="score-display">Бали: 0</div>
+    </section>
 
 </div>
 
 <script>
-    function toggleBox(id) {
+    let score = 0;
+    let answeredQuestions = [];
+
+    function toggleSolution(id) {
         const box = document.getElementById(id);
         box.style.display = box.style.display === 'block' ? 'none' : 'block';
     }
 
-    function checkQuiz(isCorrect) {
-        const feedback = document.getElementById('quiz-feedback');
+    function answer(isCorrect, qId) {
+        if (answeredQuestions.includes(qId)) return;
+        
         if (isCorrect) {
-            feedback.innerHTML = "ПРАВИЛЬНО! ✅ <br><small>Довжина — це фізична величина, вона не може бути меншою за нуль (ОДЗ!).</small>";
-            feedback.className = "feedback correct";
+            score += 5;
+            alert("Правильно! +5 балів ⚡");
         } else {
-            feedback.innerHTML = "ERROR! ❌ <br><small>Спробуй ще раз. Подумай про реальний світ.</small>";
-            feedback.className = "feedback wrong";
+            alert("Помилка! Спробуй перечитати теорію ❌");
         }
+        
+        answeredQuestions.push(qId);
+        document.getElementById('score-display').innerText = "Бали: " + score;
     }
 </script>
 
