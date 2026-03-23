@@ -3,131 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Model §22 | Interactive Dashboard</title>
+    <title>Математичне моделювання | §22</title>
     <style>
         :root {
             --lime: #32CD32;
-            --lime-glow: rgba(50, 205, 50, 0.5);
-            --bg: #050505;
+            --lime-glow: rgba(50, 205, 50, 0.4);
+            --bg: #0a0a0a;
             --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         body {
             background-color: var(--bg);
-            color: #fff;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            color: #eee;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            background-image: radial-gradient(circle at top right, #1a2a1a, transparent);
+            background-image: radial-gradient(circle at top right, #1a201a, transparent);
         }
 
-        header {
+        /* Навігація */
+        nav {
             margin: 40px 0;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: var(--lime);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 15px var(--lime-glow);
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            width: 90%;
-            max-width: 1200px;
-            padding-bottom: 50px;
-        }
-
-        /* Glassmorphism Card Style */
-        .main-card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 30px;
-            transition: all 0.4s ease;
             display: flex;
-            flex-direction: column;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        .main-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--lime);
-            box-shadow: 0 0 30px var(--lime-glow);
-        }
-
-        .card-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
-        h2 { color: var(--lime); font-size: 1.5rem; margin-top: 0; }
-
-        /* Content Elements */
-        .formula {
-            display: block;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--lime);
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            color: var(--lime);
-            text-align: center;
-        }
-
-        .step-list { padding-left: 20px; color: #ccc; }
-        .step-list li { margin-bottom: 10px; }
-
-        /* Interactive Buttons */
-        .btn-toggle {
-            background: transparent;
-            border: 1px solid var(--lime);
-            color: var(--lime);
-            padding: 10px;
-            border-radius: 12px;
+        .nav-btn {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
             cursor: pointer;
-            width: 100%;
             font-weight: bold;
-            margin-top: 15px;
+            backdrop-filter: blur(10px);
             transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .btn-toggle:hover { background: var(--lime); color: #000; }
+        .nav-btn:hover, .nav-btn.active {
+            border-color: var(--lime);
+            box-shadow: 0 0 15px var(--lime-glow);
+            color: var(--lime);
+            transform: translateY(-3px);
+        }
 
-        .solution-box {
+        /* Контейнери секцій */
+        .content-section {
             display: none;
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            font-size: 0.9rem;
-            border-left: 3px solid var(--lime);
+            width: 90%;
+            max-width: 1000px;
+            animation: fadeIn 0.5s ease;
         }
 
-        /* Quiz */
+        .content-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Картки та блоки */
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(5px);
+        }
+
+        h1, h2, h3 { color: var(--lime); }
+
+        .formula-box {
+            background: rgba(0,0,0,0.3);
+            border-left: 4px solid var(--lime);
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            color: #bfff00;
+        }
+
+        .step { margin-bottom: 15px; }
+        .step b { color: var(--lime); display: block; margin-bottom: 5px; }
+
+        /* Тести */
         .quiz-option {
             background: rgba(255,255,255,0.05);
-            padding: 12px;
-            margin: 8px 0;
+            padding: 15px;
+            margin: 10px 0;
             border-radius: 10px;
             cursor: pointer;
             transition: 0.2s;
-            border: 1px solid transparent;
         }
 
-        .quiz-option:hover { border-color: var(--lime); background: rgba(50, 205, 50, 0.1); }
-        
-        #score-display {
-            font-size: 1.2rem;
-            color: var(--lime);
+        .quiz-option:hover { background: rgba(50, 205, 50, 0.1); border: 1px solid var(--lime); }
+
+        .btn-check {
+            background: var(--lime);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-weight: bold;
-            text-align: center;
+            cursor: pointer;
             margin-top: 10px;
         }
 
@@ -135,97 +120,100 @@
 </head>
 <body>
 
-<header>
-    <h1>§ 22. Квадратне рівняння як модель</h1>
-</header>
+    <header style="text-align: center; margin-top: 50px;">
+        <h1>§ 22. Квадратне рівняння як модель</h1>
+        <p style="color: #888;">Інтерактивний посібник для 8-го класу</p>
+    </header>
 
-<div class="dashboard">
+    <nav>
+        <button class="nav-btn active" onclick="showSection('theory')">Пояснення теми</button>
+        <button class="nav-btn" onclick="showSection('tasks')">Завдання</button>
+        <button class="nav-btn" onclick="showSection('quiz')">Тести</button>
+    </nav>
 
-    <section class="main-card">
-        <span class="card-icon">🧠</span>
-        <h2>БАЗА: ЯК ЦЕ ЗРОЗУМІТИ?</h2>
-        <div class="content">
-            <p><strong>Алгоритм перетворення задачі в код:</strong></p>
-            <ol class="step-list">
-                <li><strong>Вибір невідомого:</strong> Позначаємо головне питання через <span class="formula">x</span>.</li>
-                <li><strong>Зв'язки:</strong> Виражаємо інші дані через цей <code>x</code>.</li>
-                <li><strong>Математична модель:</strong> Складаємо рівняння, що описує баланс задачі.</li>
-                <li><strong>Solve:</strong> Знаходимо корені $x_1$ та $x_2$.</li>
-                <li><strong>Debug:</strong> Відсіюємо нелогічні результати (ОДЗ).</li>
-            </ol>
-            <p style="font-size: 0.8rem; color: #888;">*Наприклад: сторона фігури не може бути від'ємною!</p>
+    <section id="theory" class="content-section active">
+        <div class="card">
+            <h2>🧠 Алгоритм моделювання (5 кроків)</h2>
+            <div class="step"><b>1. Аналіз:</b> Визначаємо, що відомо і що треба знайти.</div>
+            <div class="step"><b>2. Вибір невідомого:</b> Позначаємо одну з величин через <i>x</i>.</div>
+            <div class="step"><b>3. Складання моделі:</b> Виражаємо інші дані через <i>x</i> і складаємо рівняння.</div>
+            <div class="step"><b>4. Розв'язання:</b> Знаходимо корені квадратного рівняння.</div>
+            <div class="step"><b>5. Перевірка:</b> Виключаємо корені, що не підходять за змістом (напр. від'ємний час).</div>
         </div>
-    </section>
 
-    <section class="main-card">
-        <span class="card-icon">🛠️</span>
-        <h2>LEVEL UP: ПРИКЛАДИ</h2>
-        
-        <div class="task">
-            <p><strong>🔹 Задача про Ромб:</strong> Площа 54 см², сер. арифм. діагоналей — 10,5 см.</p>
-            <button class="btn-toggle" onclick="toggleSolution('sol1')">Розгорнути рішення</button>
-            <div id="sol1" class="solution-box">
-                $d_1 + d_2 = 21$ (бо сер. арифм. 10.5). Нехай $d_1 = x$, тоді $d_2 = 21-x$. <br>
-                Формула площі: $S = 0.5 \cdot d_1 \cdot d_2$.<br>
-                <span class="formula">0.5 \cdot x(21-x) = 54</span><br>
-                $x^2 - 21x + 108 = 0$. <br>
-                $D = 21^2 - 4 \cdot 108 = 441 - 432 = 9$.<br>
-                $x_1=12, x_2=9$. Відповідь: 12 см і 9 см.
+        <div class="card">
+            <h2>📝 Приклади розв'язання</h2>
+            <h3>🔹 Площа клумби (54 м²)</h3>
+            <p>Довжина на 3м більша за ширину. Знайти сторони.</p>
+            <div class="formula-box">
+                x(x + 3) = 54 <br>
+                x² + 3x - 54 = 0 <br>
+                D = 9 - 4(-54) = 225 (15²) <br>
+                x = 6 (корінь -9 не підходить)
             </div>
-        </div>
-
-        <div class="task" style="margin-top: 10px;">
-            <p><strong>🔹 Задача про Точки:</strong> Кожна точка з'єднана з іншими. Всього 351 відрізок.</p>
-            <button class="btn-toggle" onclick="toggleSolution('sol2')">Розгорнути рішення</button>
-            <div id="sol2" class="solution-box">
-                Нехай точок $n$. Кожна з'єднана з $(n-1)$ точками.<br>
-                <span class="formula">\frac{n(n-1)}{2} = 351</span><br>
-                $n^2 - n - 702 = 0$. $D = 2809 = 53^2$.<br>
-                $n = 27$ (другий корінь від'ємний — видаляємо).
-            </div>
-        </div>
-    </section>
-
-    <section class="main-card">
-        <span class="card-icon">✅</span>
-        <h2>CHECK-POINT: ТЕСТИ</h2>
-        <div id="quiz">
-            <p id="q-text"><strong>Q1:</strong> Що називають математичною моделлю задачі?</p>
-            <div class="quiz-option" onclick="answer(false, 1)">А: Красивий малюнок у зошиті</div>
-            <div class="quiz-option" onclick="answer(true, 1)">Б: Рівняння, що описує умову</div>
             
-            <p id="q2-text" style="margin-top:20px;"><strong>Q2:</strong> Корені рівняння $x_1 = 10, x_2 = -5$ для задачі про кількість учнів. Що у відповідь?</p>
-            <div class="quiz-option" onclick="answer(true, 2)">А: Тільки 10</div>
-            <div class="quiz-option" onclick="answer(false, 2)">Б: Обидва числа</div>
+            <h3>🔹 Рух човна</h3>
+            <p>Власна швидкість 18 км/год. Пройшов 20 км за течією і 20 км проти. Швидкість течії - ?</p>
+            <div class="formula-box">
+                20 / (18 + x) + 20 / (18 - x) = Час
+            </div>
         </div>
-        <div id="score-display">Бали: 0</div>
     </section>
 
-</div>
+    <section id="tasks" class="content-section">
+        <div class="card">
+            <h2>🛠️ Практикум</h2>
+            <p><b>Завдання 1:</b> Одна сторона прямокутника на 5 см менша за іншу. Площа дорівнює 84 см². Знайдіть периметр.</p>
+            <p><b>Завдання 2:</b> Добуток двох послідовних цілих чисел дорівнює 156. Знайдіть ці числа.</p>
+            <p><b>Завдання 3:</b> Катер пройшов 30 км за течією річки і повернувся назад, витративши на весь шлях 5 годин. Знайдіть власну швидкість катера, якщо швидкість течії 3 км/год.</p>
+        </div>
+    </section>
 
-<script>
-    let score = 0;
-    let answeredQuestions = [];
+    <section id="quiz" class="content-section">
+        <div class="card" id="q1">
+            <h3>Питання 1: Що є математичною моделлю задачі?</h3>
+            <div class="quiz-option" onclick="check(this, true)">Рівняння або нерівність, що описує умову</div>
+            <div class="quiz-option" onclick="check(this, false)">Малюнок або схема задачі</div>
+            <div class="quiz-option" onclick="check(this, false)">Відповідь до задачі</div>
+        </div>
 
-    function toggleSolution(id) {
-        const box = document.getElementById(id);
-        box.style.display = box.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function answer(isCorrect, qId) {
-        if (answeredQuestions.includes(qId)) return;
+        <div class="card" id="q2">
+            <h3>Питання 2: Корені x₁=8, x₂=-12. Для задачі про кількість деталей оберемо:</h3>
+            <div class="quiz-option" onclick="check(this, true)">Тільки 8</div>
+            <div class="quiz-option" onclick="check(this, false)">Тільки -12</div>
+            <div class="quiz-option" onclick="check(this, false)">Обидва числа</div>
+        </div>
         
-        if (isCorrect) {
-            score += 5;
-            alert("Правильно! +5 балів ⚡");
-        } else {
-            alert("Помилка! Спробуй перечитати теорію ❌");
+        <div style="text-align: center;">
+            <p id="score">Бали: 0</p>
+        </div>
+    </section>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
-        
-        answeredQuestions.push(qId);
-        document.getElementById('score-display').innerText = "Бали: " + score;
-    }
-</script>
 
+        let score = 0;
+        function check(el, isCorrect) {
+            const parent = el.parentElement;
+            if (parent.dataset.answered) return;
+
+            if (isCorrect) {
+                el.style.borderColor = "#32CD32";
+                el.style.background = "rgba(50, 205, 50, 0.2)";
+                score += 5;
+            } else {
+                el.style.borderColor = "#ff4d4d";
+                el.style.background = "rgba(255, 77, 77, 0.2)";
+            }
+            parent.dataset.answered = "true";
+            document.getElementById('score').innerText = "Бали: " + score;
+        }
+    </script>
 </body>
 </html>
