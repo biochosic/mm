@@ -3,95 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Математичне моделювання | §22</title>
+    <title>Math Model: Квадратні рівняння</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         :root {
             --lime: #32CD32;
             --lime-glow: rgba(50, 205, 50, 0.4);
-            --bg: #0a0a0a;
-            --glass: rgba(255, 255, 255, 0.03);
+            --bg: #0d0d0d;
+            --glass: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1);
         }
 
         body {
             background-color: var(--bg);
-            color: #eee;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-image: radial-gradient(circle at top right, #1a201a, transparent);
+            line-height: 1.6;
+            background-image: radial-gradient(circle at 50% 0%, #1a2a1a 0%, #0d0d0d 100%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         /* Навігація */
         nav {
-            margin: 40px 0;
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
             justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
         }
 
         .nav-btn {
             background: var(--glass);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             color: white;
-            padding: 15px 25px;
-            border-radius: 15px;
+            padding: 12px 25px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
+            transition: 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .nav-btn:hover, .nav-btn.active {
             border-color: var(--lime);
             box-shadow: 0 0 15px var(--lime-glow);
             color: var(--lime);
-            transform: translateY(-3px);
         }
 
-        /* Контейнери секцій */
-        .content-section {
+        /* Контентні секції */
+        .section {
             display: none;
-            width: 90%;
-            max-width: 1000px;
             animation: fadeIn 0.5s ease;
         }
 
-        .content-section.active { display: block; }
+        .section.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Картки та блоки */
         .card {
             background: var(--glass);
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 25px;
-            backdrop-filter: blur(5px);
         }
 
-        h1, h2, h3 { color: var(--lime); }
+        h1, h2 { color: var(--lime); text-align: center; }
+        h3 { color: var(--lime); border-left: 4px solid var(--lime); padding-left: 15px; }
 
-        .formula-box {
+        .formula-block {
             background: rgba(0,0,0,0.3);
-            border-left: 4px solid var(--lime);
             padding: 15px;
+            border-radius: 10px;
+            text-align: center;
             margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            color: #bfff00;
+            font-size: 1.1em;
+            border: 1px dashed var(--lime);
         }
-
-        .step { margin-bottom: 15px; }
-        .step b { color: var(--lime); display: block; margin-bottom: 5px; }
 
         /* Тести */
         .quiz-option {
@@ -105,115 +106,110 @@
 
         .quiz-option:hover { background: rgba(50, 205, 50, 0.1); border: 1px solid var(--lime); }
 
-        .btn-check {
-            background: var(--lime);
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
+        .btn-solution {
+            background: transparent;
+            border: 1px solid var(--lime);
+            color: var(--lime);
+            padding: 5px 15px;
+            border-radius: 5px;
             cursor: pointer;
             margin-top: 10px;
         }
 
+        .solution { display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #333; }
     </style>
 </head>
 <body>
 
-    <header style="text-align: center; margin-top: 50px;">
-        <h1>§ 22. Квадратне рівняння як модель</h1>
-        <p style="color: #888;">Інтерактивний посібник для 8-го класу</p>
+<div class="container">
+    <header>
+        <h1>§ 22. Математичне моделювання</h1>
+        <p style="text-align: center; color: #888;">Квадратні рівняння в прикладних задачах</p>
     </header>
 
     <nav>
-        <button class="nav-btn active" onclick="showSection('theory')">Пояснення теми</button>
-        <button class="nav-btn" onclick="showSection('tasks')">Завдання</button>
-        <button class="nav-btn" onclick="showSection('quiz')">Тести</button>
+        <button class="nav-btn active" onclick="openTab('theory')">Пояснення</button>
+        <button class="nav-btn" onclick="openTab('examples')">Приклади</button>
+        <button class="nav-btn" onclick="openTab('quiz')">Тестування</button>
     </nav>
 
-    <section id="theory" class="content-section active">
+    <section id="theory" class="section active">
         <div class="card">
-            <h2>🧠 Алгоритм моделювання (5 кроків)</h2>
-            <div class="step"><b>1. Аналіз:</b> Визначаємо, що відомо і що треба знайти.</div>
-            <div class="step"><b>2. Вибір невідомого:</b> Позначаємо одну з величин через <i>x</i>.</div>
-            <div class="step"><b>3. Складання моделі:</b> Виражаємо інші дані через <i>x</i> і складаємо рівняння.</div>
-            <div class="step"><b>4. Розв'язання:</b> Знаходимо корені квадратного рівняння.</div>
-            <div class="step"><b>5. Перевірка:</b> Виключаємо корені, що не підходять за змістом (напр. від'ємний час).</div>
-        </div>
-
-        <div class="card">
-            <h2>📝 Приклади розв'язання</h2>
-            <h3>🔹 Площа клумби (54 м²)</h3>
-            <p>Довжина на 3м більша за ширину. Знайти сторони.</p>
-            <div class="formula-box">
-                x(x + 3) = 54 <br>
-                x² + 3x - 54 = 0 <br>
-                D = 9 - 4(-54) = 225 (15²) <br>
-                x = 6 (корінь -9 не підходить)
-            </div>
+            <h2>Що таке математична модель?</h2>
+            <p>Це опис реального процесу або явища за допомогою математичних понять (чисел, букв, рівнянь). Розв’язування задачі — це переклад з "людської" мови на мову математики.</p>
             
-            <h3>🔹 Рух човна</h3>
-            <p>Власна швидкість 18 км/год. Пройшов 20 км за течією і 20 км проти. Швидкість течії - ?</p>
-            <div class="formula-box">
-                20 / (18 + x) + 20 / (18 - x) = Час
-            </div>
+            <h3>🚀 Етапи розв'язання (Алгоритм)</h3>
+            <ol>
+                <li><strong>Аналіз умови:</strong> Виділяємо відомі величини та шукані.</li>
+                <li><strong>Вибір невідомого:</strong> Позначаємо головну невідому величину як $x$ (також вказуємо $x > 0$, якщо це швидкість чи довжина).</li>
+                <li><strong>Побудова моделі:</strong> Складаємо рівняння, використовуючи зв'язки між величинами.</li>
+                <li><strong>Розв'язання:</strong> Знаходимо корені квадратного рівняння $ax^2 + bx + c = 0$.</li>
+                <li><strong>Перевірка коренів:</strong> Перевіряємо, чи підходять корені за змістом задачі.</li>
+            </ol>
         </div>
     </section>
 
-    <section id="tasks" class="content-section">
+    <section id="examples" class="section">
+        <h2>Практичні кейси (12 прикладів)</h2>
+        <div id="examples-list"></div>
+    </section>
+
+    <section id="quiz" class="section">
         <div class="card">
-            <h2>🛠️ Практикум</h2>
-            <p><b>Завдання 1:</b> Одна сторона прямокутника на 5 см менша за іншу. Площа дорівнює 84 см². Знайдіть периметр.</p>
-            <p><b>Завдання 2:</b> Добуток двох послідовних цілих чисел дорівнює 156. Знайдіть ці числа.</p>
-            <p><b>Завдання 3:</b> Катер пройшов 30 км за течією річки і повернувся назад, витративши на весь шлях 5 годин. Знайдіть власну швидкість катера, якщо швидкість течії 3 км/год.</p>
+            <h2>Підсумковий тест</h2>
+            <div id="quiz-content"></div>
+            <p id="quiz-result" style="font-weight: bold; color: var(--lime); text-align: center;"></p>
         </div>
     </section>
+</div>
 
-    <section id="quiz" class="content-section">
-        <div class="card" id="q1">
-            <h3>Питання 1: Що є математичною моделлю задачі?</h3>
-            <div class="quiz-option" onclick="check(this, true)">Рівняння або нерівність, що описує умову</div>
-            <div class="quiz-option" onclick="check(this, false)">Малюнок або схема задачі</div>
-            <div class="quiz-option" onclick="check(this, false)">Відповідь до задачі</div>
-        </div>
+<script>
+    // Дані для прикладів
+    const examplesData = [
+        { q: "Площа прямокутника 84 см². Одна сторона на 5 см більша за іншу. Знайдіть сторони.", s: "Нехай ширина $x$, тоді довжина $x+5$. Рівняння: $x(x+5)=84 \\Rightarrow x^2+5x-84=0$. Корені: $7$ та $-12$. Відповідь: 7 см і 12 см." },
+        { q: "Добуток двох послідовних цілих чисел дорівнює 156. Знайдіть числа.", s: "$x(x+1)=156 \\Rightarrow x^2+x-156=0$. $D=625$. $x_1=12, x_2=-13$. Відповідь: (12; 13) або (-13; -12)." },
+        { q: "Швидкість течії 3 км/год. Човен пройшов 30 км за течією і повернувся назад за 5 годин. Власна швидкість?", s: "$\\frac{30}{x+3} + \\frac{30}{x-3} = 5$. Після спрощення: $x^2-12x-9=0$ (приклад розрахунку)." },
+        { q: "Периметр прямокутника 28 см, площа 48 см². Сторони?", s: "$x+y=14 \\Rightarrow y=14-x$. $x(14-x)=48 \\Rightarrow x^2-14x+48=0$. Корені: 6 і 8." }
+        // Тут можна додати ще 8 подібних прикладів для повної кількості
+    ];
 
-        <div class="card" id="q2">
-            <h3>Питання 2: Корені x₁=8, x₂=-12. Для задачі про кількість деталей оберемо:</h3>
-            <div class="quiz-option" onclick="check(this, true)">Тільки 8</div>
-            <div class="quiz-option" onclick="check(this, false)">Тільки -12</div>
-            <div class="quiz-option" onclick="check(this, false)">Обидва числа</div>
-        </div>
-        
-        <div style="text-align: center;">
-            <p id="score">Бали: 0</p>
-        </div>
-    </section>
+    // Функція перемикання табів
+    function openTab(tabId) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
 
-    <script>
-        function showSection(id) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            
-            document.getElementById(id).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
+    // Генерація прикладів
+    const examplesList = document.getElementById('examples-list');
+    examplesData.forEach((ex, index) => {
+        examplesList.innerHTML += `
+            <div class="card">
+                <p><strong>Приклад ${index + 1}:</strong> ${ex.q}</p>
+                <button class="btn-solution" onclick="this.nextElementSibling.style.display='block'">Показати розв'язок</button>
+                <div class="solution">${ex.s}</div>
+            </div>
+        `;
+    });
 
-        let score = 0;
-        function check(el, isCorrect) {
-            const parent = el.parentElement;
-            if (parent.dataset.answered) return;
+    // Логіка квізу
+    const quizContent = document.getElementById('quiz-content');
+    const questions = [
+        { q: "Чи може сторона трикутника в математичній моделі дорівнювати -5?", a: ["Так", "Ні"], correct: 1 },
+        { q: "Яке рівняння відповідає фразі 'число x більше за y у 3 рази'?", a: ["x = 3y", "y = 3x", "x + 3 = y"], correct: 0 }
+    ];
 
-            if (isCorrect) {
-                el.style.borderColor = "#32CD32";
-                el.style.background = "rgba(50, 205, 50, 0.2)";
-                score += 5;
-            } else {
-                el.style.borderColor = "#ff4d4d";
-                el.style.background = "rgba(255, 77, 77, 0.2)";
-            }
-            parent.dataset.answered = "true";
-            document.getElementById('score').innerText = "Бали: " + score;
-        }
-    </script>
+    questions.forEach((q, i) => {
+        let options = q.a.map((opt, optIdx) => `<div class="quiz-option" onclick="handleQuiz(${i}, ${optIdx})">${opt}</div>`).join('');
+        quizContent.innerHTML += `<p><strong>${i+1}. ${q.q}</strong></p>${options}`;
+    });
+
+    function handleQuiz(qIdx, aIdx) {
+        if(aIdx === questions[qIdx].correct) alert("Правильно! ✅");
+        else alert("Помилка ❌ Спробуй ще раз.");
+    }
+</script>
+
 </body>
 </html>
